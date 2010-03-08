@@ -12,12 +12,12 @@
 #
 # The Original Code is the InlineImages Bugzilla Extension.
 #
-# The Initial Developer of the Original Code is YOUR NAME
+# The Initial Developer of the Original Code is Guy Pyrzak
 # Portions created by the Initial Developer are Copyright (C) 2010 the
 # Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-#   YOUR NAME <YOUR EMAIL ADDRESS>
+#   Guy Pyrzak <guy.pyrzak@gmail.com>
 
 package Bugzilla::Extension::InlineImages;
 use strict;
