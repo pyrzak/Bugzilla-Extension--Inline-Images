@@ -22,7 +22,7 @@
 package Bugzilla::Extension::InlineImages;
 use strict;
 use base qw(Bugzilla::Extension);
-use Bugzilla::Template qw(get_attachment_link);
+use Bugzilla::Template;
 
 # This code for this is in ./extensions/InlineImages/lib/Util.pm
 use Bugzilla::Extension::InlineImages::Util;
