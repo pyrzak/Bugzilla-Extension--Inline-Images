@@ -18,51 +18,46 @@
 #
 # Contributor(s):
 #   Guy Pyrzak <guy.pyrzak@gmail.com>
+#   Gervase Markham <gerv@gerv.net>
 
 package Bugzilla::Extension::InlineImages;
 use strict;
 use base qw(Bugzilla::Extension);
 use Bugzilla::Template;
 
-# This code for this is in ./extensions/InlineImages/lib/Util.pm
-use Bugzilla::Extension::InlineImages::Util;
+use constant NAME => 'InlineImages';
 
-our $VERSION = '0.01';
-
-# See the documentation of Bugzilla::Hook ("perldoc Bugzilla::Hook" 
-# in the bugzilla directory) for a list of all available hooks.
-sub install_update_db {
-   my ($self, $args) = @_;
-
-
-}
+our $VERSION = '0.2';
 
 sub bug_format_comment {
-   my ($self, $args) = @_;
-   my $regexes = $args->{'regexes'};
-   my $replacer = {    
-             match => qr~\b(attachment\s*\#?\s*(\d+))~,
-             replace => \&_inlineAttachments
-     };
-   push( @$regexes, $replacer );
+    my ($self, $args) = @_;
+    my $regexes = $args->{'regexes'};
+    
+    push(@$regexes, {    
+        match   => qr~\b(attachment\s*\#?\s*(\d+))~,
+        replace => \&_inlineAttachments
+    });
 }
 
 sub _inlineAttachments {
     my $args = shift @_;
     my $attachment_id = $args->{matches}->[1];
     my $attachment_string = $args->{matches}->[0];
-    # we need to call get_attachment_link because otherwise it will be skipped
-    my $attachment_msg = Bugzilla::Template::get_attachment_link( $attachment_id, $attachment_string);
+    
+    # We need to call get_attachment_link because otherwise it will be skipped
+    my $msg = Bugzilla::Template::get_attachment_link($attachment_id, 
+                                                      $attachment_string);
     
     my $dbh = Bugzilla->dbh;
     my ($mimetype) =
         $dbh->selectrow_array('SELECT mimetype
                                FROM attachments WHERE attach_id = ?',
                                undef, $attachment_id);
-    if( $mimetype =~ m/image\/(gif|png|jpeg)/ ) {
-        $attachment_msg =~ s/(?=name="attach_)/ class="is_image" /;
+    if ($mimetype =~ /^image\/(gif|png|jpeg)$/) {
+        $msg =~ s/(?=name="attach_)/ class="is_image" /;
     }
-    return $attachment_msg;
+    
+    return $msg;
 };
 
 __PACKAGE__->NAME;
