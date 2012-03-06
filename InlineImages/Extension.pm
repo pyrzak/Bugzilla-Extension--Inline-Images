@@ -25,7 +25,7 @@ use strict;
 use base qw(Bugzilla::Extension);
 use Bugzilla::Template;
 
-use constant NAME => 'InlineImages';
+#use constant NAME => 'InlineImages';
 
 our $VERSION = '0.2';
 
